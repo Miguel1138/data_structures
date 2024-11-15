@@ -1,4 +1,4 @@
-package Structures;
+package datastructures;
 
 public class mQueue {
     private mNode first;
