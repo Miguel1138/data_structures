@@ -1,5 +1,10 @@
 package datastructures.binarysearchtree;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.Stack;
+
 public class mBinarySearchTree {
 
     private Node root;
@@ -49,23 +54,23 @@ public class mBinarySearchTree {
 
     private Node deleteNode(Node currentNode, int value) {
         // base case
-        if(currentNode == null) return null;
+        if (currentNode == null) return null;
 
         if (value < currentNode.value) {
             currentNode.left = deleteNode(currentNode.left, value);
-        } else if(value > currentNode.value) {
+        } else if (value > currentNode.value) {
             currentNode.right = deleteNode(currentNode.right, value);
         } else {
             // Leaf node
-            if(currentNode.left == null && currentNode.right == null) {
+            if (currentNode.left == null && currentNode.right == null) {
                 return null;
             }
             // Has left node
-            else if(currentNode.right == null) {
+            else if (currentNode.right == null) {
                 currentNode = currentNode.left;
             }
             // has right node
-            else if(currentNode.left == null) {
+            else if (currentNode.left == null) {
                 currentNode = currentNode.right;
             } else {
                 // has right and left node.
@@ -80,7 +85,7 @@ public class mBinarySearchTree {
     }
 
     private int minValue(Node current) {
-        while(current.left != null) {
+        while (current.left != null) {
             current = current.left;
         }
         return current.value;
@@ -117,6 +122,108 @@ public class mBinarySearchTree {
         invertTree(node.right);
 
         return node;
+    }
+
+    // Adding Tree Traversal methods
+    public ArrayList<Integer> BreadthFirstTraversal() {
+        Node currentNode = root;
+        Queue<Node> queue = new LinkedList<>();
+        ArrayList<Integer> results = new ArrayList<>();
+        queue.add(currentNode);
+
+        while (queue.size() > 0) {
+            currentNode = queue.remove();
+            results.add(currentNode.value);
+
+            if (currentNode.left != null) {
+                queue.add(currentNode.left);
+            }
+            if (currentNode.right != null) {
+                queue.add(currentNode.right);
+            }
+        }
+
+        return results;
+    }
+
+    // Method that runs trough the binary search tree, always looking first at the minimum left.
+    public ArrayList<Integer> DepthFirstTraversalPreOrder() {
+        ArrayList<Integer> results = new ArrayList<>();
+
+        // Since Java doesn't have a "method inside a method" feature, we construct a inner class inside with the proper method
+        // we wanted to use.
+        class Traverse {
+            Traverse(Node currentNode) {
+                results.add(currentNode.value);
+                if (currentNode.left != null) new Traverse(currentNode.left);
+                if (currentNode.right != null) new Traverse(currentNode.right);
+            }
+        }
+
+        new Traverse(root);
+        return results;
+    }
+
+    public ArrayList<Integer> DFSPostOrder() {
+        ArrayList<Integer> results = new ArrayList<>();
+
+        class Traverse {
+            Traverse(Node currentNode) {
+                if (currentNode.left != null) new Traverse(currentNode.left);
+                if (currentNode.right != null) new Traverse(currentNode.right);
+                results.add(currentNode.value);
+            }
+        }
+        new Traverse(root);
+        return results;
+    }
+
+    public ArrayList<Integer> DFSInOrder() {
+        ArrayList<Integer> results = new ArrayList<>();
+        class Traverse {
+            Traverse(Node currentNode) {
+                if (currentNode.left != null)
+                    new Traverse(currentNode.left);
+
+                results.add(currentNode.value);
+
+                if (currentNode.right != null)
+                    new Traverse(currentNode.right);
+            }
+        }
+        return results;
+    }
+
+    // LeetCode TraversalTree
+    public boolean isValidBST() {
+        ArrayList<Integer> bstInOrder = DFSInOrder();
+        for (int i = 1; i <= bstInOrder.size(); i++) {
+            if (bstInOrder.get(i - 1) > bstInOrder.get(i)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public Integer kthSmallest(int value) {
+        Stack<Node> stack = new Stack<>();
+        Node currentNode = root;
+
+        while (!stack.isEmpty() || currentNode != null) {
+            while (currentNode != null) {
+                stack.push(currentNode);
+                currentNode = currentNode.left;
+            }
+            currentNode = stack.pop();
+            value -= 1;
+            if (value == 0) {
+                return currentNode.value;
+            }
+            currentNode = currentNode.right;
+        }
+
+        return null;
     }
 
 }
