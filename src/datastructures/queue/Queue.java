@@ -1,7 +1,5 @@
 package datastructures.queue;
 
-import datastructures.linked_list.Node;
-
 public class mQueue {
     private Node first;
     private Node last;
@@ -29,9 +27,9 @@ public class mQueue {
 
     // O(1) complexity
     public Node dequeue() {
-        if(length == 0) return null;
+        if (length == 0) return null;
         Node temp = first;
-        if(length == 1) {
+        if (length == 1) {
             first = null;
             last = null;
         } else first = first.next;
@@ -39,6 +37,15 @@ public class mQueue {
         temp.next = null;
         length--;
         return temp;
+    }
+
+    protected class Node {
+        private int value;
+        private Node next;
+
+        Node(int value) {
+            this.value = value;
+        }
     }
 
 }
