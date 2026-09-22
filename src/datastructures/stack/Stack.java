@@ -1,18 +1,16 @@
 package datastructures.stack;
 
-import datastructures.linked_list.Node;
-
-public class mStack {
+public class Stack {
     private Node top;
     private int height;
 
-    mStack(int value) {
+    Stack(int value) {
         Node newNode = new Node(value);
         top = newNode;
         height = 1;
     }
 
-    public void push (int value) {
+    public void push(int value) {
         Node newNode = new Node(value);
         if (height == 0) {
             top = newNode;
@@ -24,7 +22,7 @@ public class mStack {
     }
 
     public Node pop() {
-        if(height == 0) return null;
+        if (height == 0) return null;
 
         Node temp = top;
         top = top.next;
@@ -40,5 +38,14 @@ public class mStack {
 
     public int getHeight() {
         return height;
+    }
+
+    class Node {
+        private int value;
+        private Node next;
+
+        Node(int value) {
+            this.value = value;
+        }
     }
 }
